@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phishing URL Scanner</title>
+    <style>
+        body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        .danger { color: red; }
+        .safe { color: green; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>🔍 Phishing URL Scanner</h2>
+    <form method="POST">
+        <input type="text" name="url" placeholder="Enter URL..." required style="width: 100%; padding: 10px;">
+        <button type="submit" style="margin-top: 10px;">Scan</button>
+    </form>
+    {% comment %} used to display the scan results {% endcomment %}
+
+    {% if result %}
+    <h3>Scan Result for: <code>{{ result.url }}</code></h3>
+    <ul>
+        {% for key, value in result.heuristics.items() %}
+            <li>{{ key }}: <strong class="{{ 'danger' if value else 'safe' }}">{{ '⚠️ Yes' if value else '✅ No' }}</strong></li>
+        {% endfor %}
+        <li>Google Safe Browsing: 
+            <strong class="{{ 'danger' if result.flagged_by_google else 'safe' }}">
+                {{ '🚫 Threat Detected' if result.flagged_by_google else '✅ Clean' }}
+            </strong>
+        </li>
+    </ul>
+    {% endif %}
+</div>
+</body>
+</html>
